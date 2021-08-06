@@ -12,8 +12,17 @@ const databaseUri = process.env.DATABASE_URL || process.env.MONGODB_URI;
 if (!databaseUri) {
   console.log('DATABASE_URI not specified, falling back to localhost.');
 }
+
+const databaseOptions = {}
+
+if (process.env.DB_PATH_CERTIFICATE) {
+  databaseOptions.tls = true
+  databaseOptions.tlsCAFile = process.env.DB_PATH_CERTIFICATE
+}
+
 const config = {
   databaseURI: databaseUri || 'mongodb://localhost:27017/dev',
+  databaseOptions: databaseOptions,
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
   appId: process.env.APP_ID || 'myAppId',
   masterKey: process.env.MASTER_KEY || '', //Add your master key here. Keep it secret!
